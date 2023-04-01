@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+<h1>Welcome, {{ username }}!</h1>
+<h2>Your current loan balance is {{ loan_balance }}</h2>
+<h2>Request a new loan</h2>
+<form method="POST" action="{{ url_for('request_loan') }}">
+    <label for="loan_amount">Loan amount:</label>
+    <input type="number" name="loan_amount" id="loan_amount" min="1" max="{{ max_loan_amount }}" required>
+    <button type="submit">Submit</button>
+</form>
+<h2>Pending loan requests:</h2>
+{% if pending_loans %}
+    <ul>
+        {% for loan in pending_loans %}
+            <li>
+                {{ loan.username }} requested a loan of {{ loan.amount }}.
+                {% if loan.approval %}
+                    Approved by {{ loan.approval }}.
+                {% else %}
+                    <form method="POST" action="{{ url_for('approve_loan', loan_id=loan.id) }}">
+                        <input type="hidden" name="vote" value="approve">
+                        <button type="submit">Approve</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('approve_loan', loan_id=loan.id) }}">
+                        <input type="hidden" name="vote" value="reject">
+                        <button type="submit">Reject</button>
+                    </form>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No pending loan requests.</p>
+{% endif %}
+</body>
+</html>

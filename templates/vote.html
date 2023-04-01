@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Vote on Loan Request</h2>
+    <p>Loan Amount: {{ loan.amount }}</p>
+    <p>Borrower: {{ loan.borrower }}</p>
+
+    {% if already_voted %}
+        <p>You have already voted {{ user_vote }} on this loan request.</p>
+    {% else %}
+        <form method="post" action="{{ url_for('approve_loan', loan_id=loan_id) }}">
+            <input type="radio" id="approve" name="vote" value="approve">
+            <label for="approve">Approve</label><br>
+
+            <input type="radio" id="reject" name="vote" value="reject">
+            <label for="reject">Reject</label><br>
+
+            <button type="submit">Submit Vote</button>
+        </form>
+    {% endif %}
+</body>
+</html>
+
